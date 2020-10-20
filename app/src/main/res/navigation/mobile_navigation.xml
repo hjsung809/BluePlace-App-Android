@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_home">
+
+    <action android:id="@+id/action_to_home"
+        app:destination="@id/navigation_home"
+        />
+
+    <action android:id="@+id/action_to_map"
+        app:destination="@id/navigation_map"
+        />
+
+    <action android:id="@+id/action_to_settings"
+        app:destination="@id/navigation_settings"
+        />
+
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.hojun.blueplace.ui.HomeFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_home">
+
+        <action android:id="@+id/action_home_to_map"
+            app:destination="@id/navigation_map"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            />
+
+        <action android:id="@+id/action_home_to_settings"
+            app:destination="@id/navigation_settings"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_map"
+        android:name="com.hojun.blueplace.ui.MapFragment"
+        android:label="@string/title_map"
+        tools:layout="@layout/fragment_map" >
+
+        <action android:id="@+id/action_map_to_home"
+            app:destination="@id/navigation_home"
+
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            />
+
+        <action android:id="@+id/action_map_to_settings"
+            app:destination="@id/navigation_settings"
+
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_settings"
+        android:name="com.hojun.blueplace.ui.SettingFragment"
+        android:label="@string/title_settings"
+        tools:layout="@layout/fragment_setting" >
+
+        <action android:id="@+id/action_place_list_to_home"
+            app:destination="@id/navigation_home"
+
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            />
+
+        <action android:id="@+id/action_place_list_to_map"
+            app:destination="@id/navigation_map"
+
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            />
+
+    </fragment>
+</navigation>

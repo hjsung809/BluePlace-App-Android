@@ -11,7 +11,7 @@ import java.util.List;
 @Dao
 public interface UserPlaceDao {
     @Query("SELECT * FROM userplace")
-    List<UserPlace> getAll();
+    LiveData<List<UserPlace>> getAll();
 
     @Insert
     void insert(UserPlace userPlace);

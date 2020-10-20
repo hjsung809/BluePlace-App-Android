@@ -1,4 +1,4 @@
-package com.hojun.blueplace.http;
+package com.hojun.blueplace.http.user;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -7,6 +7,7 @@ import com.hojun.blueplace.MainActivity;
 import com.hojun.blueplace.database.LocalDatabase;
 import com.hojun.blueplace.database.UserData;
 import com.hojun.blueplace.database.UserDataDao;
+import com.hojun.blueplace.http.HttpProgressInterface;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -16,22 +17,28 @@ import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
-public class InitAppAsyncTask extends AsyncTask<Void, Integer, Void> {
-    private static String TAG = "InitAppAsyncTask";
+
+public class LoginAsyncTask extends AsyncTask<Void, Integer, Void> {
+    private static String TAG = "LoginAsyncTask";
     private int httpResult;
     private String httpMessage;
-
     private HttpProgressInterface httpProgressInterface;
     private LocalDatabase localDatabase;
     private UserDataDao userDataDao;
 
-    public InitAppAsyncTask(LocalDatabase localDatabase,HttpProgressInterface httpProgressInterface) {
+    private String userEmail;
+    private String userPassword;
+
+    public LoginAsyncTask(String userEmail, String userPassword, LocalDatabase localDatabase,HttpProgressInterface httpProgressInterface) {
         super();
         this.localDatabase = localDatabase;
         if(localDatabase != null) {
             this.userDataDao = localDatabase.userDataDao();
         }
         this.httpProgressInterface = httpProgressInterface;
+
+        this.userEmail = userEmail;
+        this.userPassword = userPassword;
     }
 
     @Override
@@ -65,7 +72,7 @@ public class InitAppAsyncTask extends AsyncTask<Void, Integer, Void> {
         try {
             // ------- 로그인 -----------
             // 저장되어 있는 세션 로드
-//            UserData BPSID = userDataDao.getValue("BPSID");
+            UserData BPSID = userDataDao.getValue("BPSID");
 
             // 로그
             URL url = new URL("http://" + MainActivity.serverAddr + "/api/users/login");
@@ -74,13 +81,17 @@ public class InitAppAsyncTask extends AsyncTask<Void, Integer, Void> {
             urlConnection.setDoInput(true);                // 읽기모드 지정
             urlConnection.setRequestMethod("POST"); // 통신방식
             urlConnection.setRequestProperty("content-type", "application/json");
-//            if (BPSID != null) {
-//                urlConnection.setRequestProperty("Cookie", "BPSID=" + BPSID.value);
-//            }
+
+            if (BPSID != null) {
+                Log.d(TAG, "previous BPSID is " + BPSID.value);
+                urlConnection.setRequestProperty("Cookie", "BPSID=" + BPSID.value);
+            } else {
+                Log.d(TAG, "previous BPSID is null");
+            }
 
             OutputStream os = urlConnection.getOutputStream();
 
-            String jsonBodyString = " { \"userEmail\" : \"hjsung890@naver.com\", \"userPassword\" : \"a123\" }";
+            String jsonBodyString = " { \"userEmail\" : \"" + userEmail + "\", \"userPassword\" : \"" + userPassword + "\" }";
             os.write(jsonBodyString.getBytes("utf-8"));
             os.flush();
             os.close();
@@ -95,11 +106,25 @@ public class InitAppAsyncTask extends AsyncTask<Void, Integer, Void> {
             Map<String, List<String>> header = urlConnection.getHeaderFields();
             if(header.containsKey("Set-Cookie")) {
                 List<String> cookies = header.get("Set-Cookie");
-                for (String cookie : cookies) {
-                    Log.d(TAG, cookie);
+
+                for (String cookieString : cookies) {
+                    Log.d(TAG, cookieString);
+                    String cookie = getSessionId(cookieString);
+
+                    if (!cookie.equals("")) {
+                        // cookie 를 DB에 저장.
+                        Log.d(TAG, "received session Id is " + cookie);
+                        if (BPSID == null) {
+                            UserData userData = new UserData();
+                            userData.id = "BPSID";
+                            userData.value = cookie;
+                            userDataDao.insert(userData);
+                        }
+                    }
                 }
             }
 
+            // body의 내용.
             BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(),"UTF-8"));
             String line;
             String page = "";
@@ -120,5 +145,16 @@ public class InitAppAsyncTask extends AsyncTask<Void, Integer, Void> {
         }
 
         return null;
+    }
+
+    private String getSessionId(String cookieString) {
+        String sessionId = "";
+        String[] parameters = cookieString.split(" ");
+        for(String parameter : parameters) {
+            if (parameter.startsWith("BPSID")) {
+                return parameter.split("=")[1].replace(";", "");
+            }
+        }
+        return sessionId;
     }
 }

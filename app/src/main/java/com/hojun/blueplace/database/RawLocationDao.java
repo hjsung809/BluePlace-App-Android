@@ -11,7 +11,7 @@ import java.util.List;
 @Dao
 public interface RawLocationDao {
     @Query("SELECT * FROM rawlocation")
-    List<RawLocation> getAll();
+    LiveData<List<RawLocation>> getAll();
 
     @Insert
     void insert(RawLocation rawLocation);
