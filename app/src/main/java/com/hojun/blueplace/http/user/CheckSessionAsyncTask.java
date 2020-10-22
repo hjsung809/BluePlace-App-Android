@@ -18,27 +18,21 @@ import java.util.List;
 import java.util.Map;
 
 
-public class LoginAsyncTask extends AsyncTask<Void, Integer, Void> {
-    private static String TAG = "LoginAsyncTask";
+public class CheckSessionAsyncTask extends AsyncTask<Void, Integer, Void> {
+    private static String TAG = "CheckSessionAsyncTask";
     private int httpResult;
     private String httpMessage;
     private HttpProgressInterface httpProgressInterface;
     private LocalDatabase localDatabase;
     private UserDataDao userDataDao;
 
-    private String userEmail;
-    private String userPassword;
-
-    public LoginAsyncTask(String userEmail, String userPassword, LocalDatabase localDatabase,HttpProgressInterface httpProgressInterface) {
+    public CheckSessionAsyncTask(LocalDatabase localDatabase,HttpProgressInterface httpProgressInterface) {
         super();
         this.localDatabase = localDatabase;
         if(localDatabase != null) {
             this.userDataDao = localDatabase.userDataDao();
         }
         this.httpProgressInterface = httpProgressInterface;
-
-        this.userEmail = userEmail;
-        this.userPassword = userPassword;
     }
 
     @Override
@@ -73,9 +67,14 @@ public class LoginAsyncTask extends AsyncTask<Void, Integer, Void> {
             // ------- 로그인 -----------
             // 저장되어 있는 세션 로드
             UserData BPSID = userDataDao.getValue("BPSID");
+            if (BPSID == null) {
+                httpResult = 400;
+                httpMessage = "저장된 세션이 없습니다.";
+                return null;
+            }
 
             // 로그
-            URL url = new URL("http://" + MainActivity.serverAddr + "/api/users/login");
+            URL url = new URL("http://" + MainActivity.serverAddr + "/api/users/session");
             urlConnection = (HttpURLConnection)url.openConnection();
             urlConnection.setDoOutput(true);
             urlConnection.setDoInput(true);                // 읽기모드 지정
@@ -88,42 +87,16 @@ public class LoginAsyncTask extends AsyncTask<Void, Integer, Void> {
             } else {
                 Log.d(TAG, "previous BPSID is null");
             }
-
             OutputStream os = urlConnection.getOutputStream();
-
-            String jsonBodyString = "{ \"userEmail\" : \"" + userEmail + "\", \"userPassword\" : \"" + userPassword + "\" }";
-            os.write(jsonBodyString.getBytes("utf-8"));
-            os.flush();
+//            String jsonBodyString = "{ \"userEmail\" : \"" + userEmail + "\", \"userPassword\" : \"" + userPassword + "\" }";
+//            os.write(jsonBodyString.getBytes("utf-8"));
+//            os.flush();
             os.close();
 
             httpResult = urlConnection.getResponseCode();
             if(httpResult != HttpURLConnection.HTTP_OK){
                 Log.d(TAG,"Response Code is not OK. " + urlConnection.getResponseCode());
                 return null;
-            }
-
-            // 쿠키 설정이 있는가?
-            Map<String, List<String>> header = urlConnection.getHeaderFields();
-            if(header.containsKey("Set-Cookie")) {
-                List<String> cookies = header.get("Set-Cookie");
-
-                for (String cookieString : cookies) {
-                    Log.d(TAG, cookieString);
-                    String cookie = getSessionId(cookieString);
-
-                    if (!cookie.equals("")) {
-                        // cookie 를 DB에 저장.
-                        Log.d(TAG, "received session Id is " + cookie);
-                        UserData userData = new UserData();
-                        userData.id = "BPSID";
-                        userData.value = cookie;
-                        if (BPSID == null) {
-                            userDataDao.insert(userData);
-                        } else {
-                            userDataDao.update(userData);
-                        }
-                    }
-                }
             }
 
             // body의 내용.
@@ -147,16 +120,5 @@ public class LoginAsyncTask extends AsyncTask<Void, Integer, Void> {
             }
         }
         return null;
-    }
-
-    private String getSessionId(String cookieString) {
-        String sessionId = "";
-        String[] parameters = cookieString.split(" ");
-        for(String parameter : parameters) {
-            if (parameter.startsWith("BPSID")) {
-                return parameter.split("=")[1].replace(";", "");
-            }
-        }
-        return sessionId;
     }
 }

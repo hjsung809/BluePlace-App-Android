@@ -1,6 +1,7 @@
 package com.hojun.blueplace;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -16,77 +17,62 @@ import android.widget.Toast;
 import com.hojun.blueplace.database.LocalDatabase;
 import com.hojun.blueplace.http.HttpProgressInterface;
 import com.hojun.blueplace.http.InitAppAsyncTask;
+import com.hojun.blueplace.http.user.CheckSessionAsyncTask;
 import com.hojun.blueplace.http.user.LoginAsyncTask;
 
 public class SplashActivity extends AppCompatActivity {
-    ProgressBar progressBar;
+    public final static int LOGIN_REQUEST = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        progressBar = (ProgressBar)findViewById(R.id.progressBar);
 
         getPermission();
 
-//        InitAppAsyncTask initAppAsyncTask = new InitAppAsyncTask(null, new HttpProgressInterface() {
-//            @Override
-//            public void onPreExecute() {
-//                progressBar.setProgress(0);
-//                Toast.makeText(getApplicationContext(),"init pre excute",Toast.LENGTH_SHORT).show();
-//            }
-//
-//            @Override
-//            public void onPostExecute(Integer httpResult, String Message) {
-//                progressBar.setProgress(100);
-//                Toast.makeText(getApplicationContext(),"init post excute",Toast.LENGTH_SHORT).show();
-//            }
-//
-//            @Override
-//            public void onProgressUpdate(Integer progress) {
-//                progressBar.setProgress(progress);
-//                Toast.makeText(getApplicationContext(),"init",Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//        initAppAsyncTask.execute();
+        CheckSessionAsyncTask checkSessionAsyncTask = new CheckSessionAsyncTask(LocalDatabase.getInstance(this), new HttpProgressInterface() {
+            @Override
+            public void onPreExecute() {
 
-        LoginAsyncTask loginAsyncTask = new LoginAsyncTask("hjsung809@naver.com", "123123", LocalDatabase.getInstance(this),
-                new HttpProgressInterface() {
-                    @Override
-                    public void onPreExecute() {
+            }
 
-                    }
-
-                    @Override
-                    public void onPostExecute(Integer httpResult, String Message) {
-                        Toast.makeText(getApplicationContext(),"result : " + httpResult + " ,message : " + Message,Toast.LENGTH_LONG).show();
-                        finishSplash();
-                    }
-
-                    @Override
-                    public void onProgressUpdate(Integer progress) {
-
-                    }
+            @Override
+            public void onPostExecute(Integer httpResult, String Message) {
+                if (httpResult >= 400 && httpResult < 500) {
+                    Toast.makeText(getApplicationContext(),"세션이 유효하지 않습니다. 로그인 시도합니다.",Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                    startActivityForResult(intent, LOGIN_REQUEST);
                 }
-        );
-        loginAsyncTask.execute();
+                else if (httpResult >= 200 && httpResult < 300){
+                    Toast.makeText(getApplicationContext(),"유효한 세션이 존재합니다.",Toast.LENGTH_LONG).show();
+                    startActivity((new Intent(getApplicationContext(), MainActivity.class)));
+                    finish();
+                }
+            }
 
-//        AsyncTask<Void,Void,Void> asyncTask = new AsyncTask<Void, Void, Void>() {
-//            @Override
-//            protected Void doInBackground(Void... voids) {
-//                try {
-//                    for(int i = 2; i <= 100; i += 2) {
-//                        progressBar.setProgress(i);
-//                        Thread.sleep(20);
-//                    }
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//                finishSplash();
-//                return null;
-//            }
-//        };
-//        asyncTask.execute();
+            @Override
+            public void onProgressUpdate(Integer progress) {
+
+            }
+        });
+        checkSessionAsyncTask.execute();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == LOGIN_REQUEST) {
+            Toast.makeText(this, "login request response." + resultCode, Toast.LENGTH_SHORT).show();
+            if (resultCode == RESULT_OK) {
+                Toast.makeText(this, "login RESULT_OK", Toast.LENGTH_SHORT).show();
+                startActivity((new Intent(this, MainActivity.class)));
+                finish();
+            } else if (requestCode == RESULT_CANCELED){
+                Toast.makeText(this, "login RESULT_CANCELED", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        }
     }
 
     private void finishSplash() {
