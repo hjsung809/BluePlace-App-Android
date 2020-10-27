@@ -6,7 +6,7 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-@Database(entities = {InfectedPlace.class, RawLocation.class, UserData.class,  UserPlace.class}, version = 2, exportSchema = false)
+@Database(entities = {InfectedPlace.class, RawLocation.class, UserData.class,  UserPlace.class, CloseUser.class}, version = 2, exportSchema = false)
 public abstract class LocalDatabase extends RoomDatabase {
     private volatile static LocalDatabase INSTANCE;
 
@@ -14,7 +14,7 @@ public abstract class LocalDatabase extends RoomDatabase {
     public abstract UserDataDao userDataDao();
     public abstract UserPlaceDao userPlaceDao();
     public abstract InfectedPlaceDao infectedPlaceDao();
-
+    public abstract CloseUserDao closeUserDao();
 
     public static LocalDatabase getInstance(Context context){
         if(INSTANCE == null){
