@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.hojun.blueplace.R;
 import com.hojun.blueplace.database.LocalDatabase;
 import com.hojun.blueplace.http.HttpProgressInterface;
 import com.hojun.blueplace.http.user.CreateUserAsyncTask;

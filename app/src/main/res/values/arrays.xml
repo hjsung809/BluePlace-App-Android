@@ -10,6 +10,16 @@
         <item>reply_all</item>
     </string-array>
 
+    <string-array name="close_user_attrs">
+        <item>Id</item>
+        <item>Name</item>
+    </string-array>
+
+    <string-array name="region_attrs">
+        <item>Id</item>
+        <item>Name</item>
+    </string-array>
+
     <string-array name="clique_attrs">
         <item>Id</item>
         <item>Name</item>

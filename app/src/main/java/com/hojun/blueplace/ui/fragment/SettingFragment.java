@@ -1,4 +1,4 @@
-package com.hojun.blueplace.ui;
+package com.hojun.blueplace.ui.fragment;
 
 import android.os.Bundle;
 

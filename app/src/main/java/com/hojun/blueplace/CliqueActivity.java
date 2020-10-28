@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import com.hojun.blueplace.R;
+
 public class CliqueActivity extends AppCompatActivity {
     Spinner cliqueSpinner;
     @Override

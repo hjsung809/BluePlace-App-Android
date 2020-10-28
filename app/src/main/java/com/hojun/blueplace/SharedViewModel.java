@@ -37,6 +37,10 @@ public class SharedViewModel extends ViewModel {
         userPlace = database.userPlaceDao().getAll();
     }
 
+    public LiveData<List<UserData>> getUserData(){
+        return userData;
+    }
+
 //    public void setCenterOfMap(double latitude,double longitude) {
 ////        centerOfMap.setValue(new LatLng(latitude,longitude));
 //    }

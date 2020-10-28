@@ -1,6 +1,5 @@
 package com.hojun.blueplace;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -8,17 +7,12 @@ import androidx.core.app.ActivityCompat;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.hojun.blueplace.database.LocalDatabase;
 import com.hojun.blueplace.http.HttpProgressInterface;
-import com.hojun.blueplace.http.InitAppAsyncTask;
 import com.hojun.blueplace.http.user.CheckSessionAsyncTask;
-import com.hojun.blueplace.http.user.LoginAsyncTask;
 
 public class SplashActivity extends AppCompatActivity {
     public final static int LOGIN_REQUEST = 100;
