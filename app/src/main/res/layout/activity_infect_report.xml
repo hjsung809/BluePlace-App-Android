@@ -18,4 +18,99 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="30dp"
         />
+
+    <TextView
+        android:id="@+id/contents"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/textView2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="40dp"
+        android:text="기록된 위치 정보를 감염 관련 데이터로서\n서버에 공유하고, 다음 사항에 대해 전적으로\n동의 하는경우에만 제출 버튼을 눌러주십시오."
+        />
+
+    <LinearLayout
+        android:id="@+id/contents2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/contents"
+        app:layout_constraintBottom_toTopOf="@id/agreementCheckBox"
+        android:layout_marginTop="40dp"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="* 저장된 장소가 지정한 지인들에게 전달 됩니다."
+            android:layout_marginVertical="5dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="* 저장된 장소가 지정한 그룹원에게 전달 됩니다."
+            android:layout_marginVertical="5dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="* 저장된 장소가 지정한 지역 사람들에 전달 됩니다."
+            android:layout_marginVertical="5dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="* 저장된 장소된 장소는 지도에서 확인할 수 있습니다."
+            android:layout_marginVertical="5dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="* 공유된 장소는 삭제할 수 없습니다."
+            android:layout_marginVertical="5dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="* 익명이 보장됩니다."
+            android:layout_marginVertical="5dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="* 바이러스 확산 방지 외의 다른 용도로\n   사용되지 않습니다."
+            android:layout_marginVertical="5dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="* 동선이 겹치는 사용자에게만 공유됩니다."
+            android:layout_marginVertical="5dp"
+            />
+    </LinearLayout>
+
+    <CheckBox
+        android:id="@+id/agreementCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        app:layout_constraintBottom_toTopOf="@id/submitButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="위의 사항을 확인 하였습니다."
+        />
+
+    <Button
+        android:id="@+id/submitButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_margin="15dp"
+        android:text="제출"
+        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

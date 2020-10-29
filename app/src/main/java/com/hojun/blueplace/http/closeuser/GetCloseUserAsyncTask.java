@@ -1,4 +1,4 @@
-package com.hojun.blueplace.http.user;
+package com.hojun.blueplace.http.closeuser;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -23,7 +23,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 
-public class CloseUserAsyncTask extends AsyncTask<Void, Integer, Void> {
+public class GetCloseUserAsyncTask extends AsyncTask<Void, Integer, Void> {
     private static String TAG = "CloseUserAsyncTask";
     private int httpResult;
     private String httpMessage;
@@ -32,7 +32,7 @@ public class CloseUserAsyncTask extends AsyncTask<Void, Integer, Void> {
     private UserDataDao userDataDao;
     private CloseUserDao closeUserDao;
 
-    public CloseUserAsyncTask(LocalDatabase localDatabase,HttpProgressInterface httpProgressInterface) {
+    public GetCloseUserAsyncTask(LocalDatabase localDatabase, HttpProgressInterface httpProgressInterface) {
         super();
         this.localDatabase = localDatabase;
         if(localDatabase != null) {
@@ -135,12 +135,10 @@ public class CloseUserAsyncTask extends AsyncTask<Void, Integer, Void> {
                 } catch (Exception e) {
                     closeUserDao.update(closeUser);
                 }
-
             }
 
 //            test
 //            CloseUser closeUserRe =  closeUserDao.getValue( "2");
-//
 //            Log.d("test", closeUserRe.id + closeUserRe.email + closeUserRe.phoneNumber);
         } catch (Exception e) {
             Log.d(TAG, e.toString());
