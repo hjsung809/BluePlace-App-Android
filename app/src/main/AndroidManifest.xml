@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
         android:allowBackup="true"
@@ -16,14 +17,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".CliqueActivity"></activity>
-        <activity android:name=".SignUpActivity" />
-        <activity android:name=".LoginActivity" />
+        <activity android:name=".InfectReportActivity"></activity>
+        <activity android:name=".RegionActivity" />
+        <activity android:name=".CloseUserActivity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDuDGbOSiuczYWquiotTany7HVpDmkPsWE" />
 
+        <activity android:name=".CliqueActivity" />
+        <activity android:name=".SignUpActivity" />
+        <activity android:name=".LoginActivity" />
         <activity
             android:name=".SplashActivity"
             android:screenOrientation="portrait">
@@ -33,7 +37,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
+        <activity android:name=".MainActivity" >
+        </activity>
     </application>
 
 </manifest>

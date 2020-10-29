@@ -5,7 +5,9 @@
         <Preference
             app:key="close-user"
             app:title="지인 관계">
-
+            <intent
+                android:targetPackage="com.hojun.blueplace"
+                android:targetClass="com.hojun.blueplace.CloseUserActivity"/>
         </Preference>
 
         <Preference
@@ -18,7 +20,11 @@
 
         <Preference
             app:key="region-user"
-            app:title="지역 관계" />
+            app:title="지역 관계" >
+            <intent
+                android:targetPackage="com.hojun.blueplace"
+                android:targetClass="com.hojun.blueplace.RegionActivity"/>
+        </Preference>
 
     </PreferenceCategory>
 
@@ -42,12 +48,12 @@
     <PreferenceCategory app:title="위치 기록 설정">
 
         <SwitchPreferenceCompat
-            app:key="sync"
+            app:key="location-record"
             app:title="사용자 위치 기록" />
 
         <SwitchPreferenceCompat
-            app:dependency="sync"
-            app:key="attachment"
+            app:dependency="location-record"
+            app:key="accurate-location"
             app:summaryOff="위치기록의 오차가 크게 벌어질 수 있습니다."
             app:summaryOn="더 정확한 위치기록이 가능하지만 상단에 알림바가 보이며 배터리가 더 소모 됩니다."
             app:title="정밀한 위치 기록" />

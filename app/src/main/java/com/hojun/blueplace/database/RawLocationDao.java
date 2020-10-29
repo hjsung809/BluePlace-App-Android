@@ -10,8 +10,14 @@ import java.util.List;
 
 @Dao
 public interface RawLocationDao {
-    @Query("SELECT * FROM rawlocation")
+    @Query("SELECT * FROM rawlocation ORDER BY id DESC LIMIT 20")
     LiveData<List<RawLocation>> getAll();
+
+    @Query("SELECT * FROM rawlocation order by utc_time desc limit 1")
+    RawLocation getRecent();
+
+    @Query("SELECT * FROM rawlocation")
+    List<RawLocation> getAllForPlace();
 
     @Insert
     void insert(RawLocation rawLocation);

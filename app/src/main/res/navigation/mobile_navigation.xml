@@ -20,7 +20,7 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.hojun.blueplace.ui.HomeFragment"
+        android:name="com.hojun.blueplace.ui.fragment.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home">
 
@@ -43,7 +43,7 @@
 
     <fragment
         android:id="@+id/navigation_map"
-        android:name="com.hojun.blueplace.ui.MapFragment"
+        android:name="com.hojun.blueplace.ui.fragment.MapFragment"
         android:label="@string/title_map"
         tools:layout="@layout/fragment_map" >
 
@@ -69,7 +69,7 @@
 
     <fragment
         android:id="@+id/navigation_settings"
-        android:name="com.hojun.blueplace.ui.SettingsFragment"
+        android:name="com.hojun.blueplace.ui.fragment.SettingsFragment"
         android:label="@string/title_settings"
         tools:layout="@layout/fragment_setting" >
 
