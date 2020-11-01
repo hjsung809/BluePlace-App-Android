@@ -5,6 +5,7 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import java.util.List;
 
@@ -15,6 +16,9 @@ public interface InfectedPlaceDao {
 
     @Insert
     void insert(InfectedPlace infectedPlace);
+
+    @Update
+    void update(InfectedPlace infectedPlace);
 
     @Insert
     void insertAll(InfectedPlace... infectedPlaces);

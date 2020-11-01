@@ -16,8 +16,9 @@ public class InfectedPlace {
     public double latitude;
     public double longitude;
     public double size;
+    public int level;
 
-    public long first_visit_time;
-    public long last_visit_time;
+    public String first_visit_time;
+    public String last_visit_time;
     public int visit_count;
 }

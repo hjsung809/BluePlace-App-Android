@@ -11,26 +11,26 @@ import com.hojun.blueplace.database.UserData;
 import com.hojun.blueplace.database.UserDataDao;
 import com.hojun.blueplace.http.HttpProgressInterface;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class GetCloseUserSendRequestAsyncTask extends AsyncTask<Void, Integer, Void> {
-    private static String TAG = "CloseUserAsyncTask";
+public class DeleteCloseUserAsyncTask extends AsyncTask<Void, Integer, Void> {
+    private static String TAG = "DeleteCloseUserAsyncTask";
     private int httpResult;
     private String httpMessage;
     private HttpProgressInterface httpProgressInterface;
     private LocalDatabase localDatabase;
     private UserDataDao userDataDao;
     private CloseUserDao closeUserDao;
+    private CloseUser closeUser;
 
-    public GetCloseUserSendRequestAsyncTask(LocalDatabase localDatabase, HttpProgressInterface httpProgressInterface) {
+    public DeleteCloseUserAsyncTask(CloseUser closeUser, LocalDatabase localDatabase, HttpProgressInterface httpProgressInterface) {
         super();
         this.localDatabase = localDatabase;
+        this.closeUser = closeUser;
         if(localDatabase != null) {
             this.userDataDao = localDatabase.userDataDao();
             this.closeUserDao = localDatabase.closeUserDao();
@@ -76,8 +76,9 @@ public class GetCloseUserSendRequestAsyncTask extends AsyncTask<Void, Integer, V
                 return null;
             }
 
-            // 로그
-            URL url = new URL("http://" + MainActivity.serverAddr + "/api/closeusers/request?flag=send");
+            // 로그GetCloseUserRequestAsyncTask
+            //PostCloseUserRequestAsyncTask
+            URL url = new URL("http://" + MainActivity.serverAddr + "/api/users/?" + (this.closeUser.email!=null?"email="+this.closeUser.email+",":"") + (this.closeUser.email!=null?"phonenumber="+this.closeUser.phoneNumber+",":""));
             urlConnection = (HttpURLConnection)url.openConnection();
 //            urlConnection.setDoOutput(true);           // 읽기모드 지정
             urlConnection.setRequestMethod("GET"); // 통신방식
@@ -90,7 +91,7 @@ public class GetCloseUserSendRequestAsyncTask extends AsyncTask<Void, Integer, V
                 Log.d(TAG, "previous BPSID is null");
             }
 //            OutputStream os = urlConnection.getOutputStream();
-//            String jsonBodyString = "{ \"userEmail\" : \"" + userEmail + "\", \"userPassword\" : \"" + userPassword + "\" }";
+//            String jsonBodyString = "{ \"relatedUserId\" : \"" + relatedId + "\"}";
 //            os.write(jsonBodyString.getBytes("utf-8"));
 //            os.flush();
 //            os.close();
@@ -112,29 +113,7 @@ public class GetCloseUserSendRequestAsyncTask extends AsyncTask<Void, Integer, V
             }
             Log.d(TAG, body);
             httpMessage = body;
-            JSONObject jUser = new JSONObject(body);
 
-            JSONArray relatedUsers = jUser.getJSONArray("RelatedUser");
-
-            for (int i = 0; i < relatedUsers.length(); i++) {
-                JSONObject relatedUser = relatedUsers.getJSONObject(i);
-                Integer id = relatedUser.getInt("Id");
-                String email = relatedUser.getString("userEmail");
-                String phoneNumber = relatedUser.getString("userPhoneNumber");
-                Log.d(TAG, id + email + phoneNumber);
-                CloseUser closeUser = new CloseUser();
-                closeUser.id = id;
-                closeUser.email = email;
-                closeUser.phoneNumber = phoneNumber;
-//                closeUser.active = 0;
-//                closeUser.state = 'send';
-                try {
-                    closeUserDao.insert(closeUser);
-                } catch (Exception e) {
-                    closeUserDao.update(closeUser);
-                }
-
-            }
 
 //            test
 //            CloseUser closeUserRe =  closeUserDao.getValue( "2");

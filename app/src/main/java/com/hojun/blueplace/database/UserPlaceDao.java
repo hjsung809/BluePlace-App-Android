@@ -13,6 +13,9 @@ public interface UserPlaceDao {
     @Query("SELECT * FROM userplace")
     LiveData<List<UserPlace>> getAll();
 
+    @Query("SELECT * FROM userplace")
+    List<UserPlace> getAllForInfectedPlace();
+
     @Insert
     void insert(UserPlace userPlace);
 

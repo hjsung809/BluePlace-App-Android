@@ -14,9 +14,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.hojun.blueplace.database.LocalDatabase;
 import com.hojun.blueplace.http.HttpProgressInterface;
 import com.hojun.blueplace.http.closeuser.GetCloseUserAsyncTask;
+import com.hojun.blueplace.http.closeuser.GetCloseUserRequestAsyncTask;
 
 public class MainActivity extends AppCompatActivity {
-    public static String serverAddr = "122.35.194.46:3000";
+    public static String serverAddr = "192.168.56.1:3000";
 
     private SharedViewModel sharedViewModel;
 
@@ -54,5 +55,26 @@ public class MainActivity extends AppCompatActivity {
         // 뷰 모델 초기화.
         sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
         sharedViewModel.syncToDataBase(LocalDatabase.getInstance(this));
+
+        GetCloseUserRequestAsyncTask task = new GetCloseUserRequestAsyncTask("send", LocalDatabase.getInstance(this),
+                new HttpProgressInterface(){
+
+                    @Override
+                    public void onPreExecute() {
+
+                    }
+
+                    @Override
+                    public void onPostExecute(Integer httpResult, String Message) {
+                        Log.d("test", "hello");
+                        Log.d("test", Message);
+                    }
+
+                    @Override
+                    public void onProgressUpdate(Integer progress) {
+
+                    }
+                });
+        task.execute();
     }
 }
